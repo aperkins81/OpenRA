@@ -154,6 +154,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			SettingsUtils.BindCheckboxPref(panel, "FRAME_LIMIT_GAMESPEED_CHECKBOX", graphicSettings, "CapFramerateToGameFps");
 			SettingsUtils.BindIntSliderPref(panel, "FRAME_LIMIT_SLIDER", graphicSettings, "MaxFramerate");
 			SettingsUtils.BindCheckboxPref(panel, "PLAYER_STANCE_COLORS_CHECKBOX", gameSettings, "UsePlayerStanceColors");
+			SettingsUtils.BindCheckboxPref(panel, "KEEP_STATUS_BARS_ZOOMED_OUT_CHECKBOX", gameSettings, "KeepStatusBarsWhenZoomedOut");
 
 			var cb = panel.Get<CheckboxWidget>("PLAYER_STANCE_COLORS_CHECKBOX");
 			cb.IsChecked = () => gameSettings.UsePlayerStanceColors;

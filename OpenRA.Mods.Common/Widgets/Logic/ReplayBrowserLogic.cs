@@ -13,11 +13,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenRA.FileFormats;
+using OpenRA.Mods.Common.Traits;
 using OpenRA.Network;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -106,6 +108,9 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 		[FluentReference]
 		const string Defeat = "options-winstate.defeat";
 
+		const int MinCasterScore = 0;
+		const int MaxCasterScore = 9;
+
 		static Filter filter = new();
 
 		readonly Widget panel;
@@ -119,6 +124,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 		MapPreview map;
 		ReplayMetadata selectedReplay;
+		bool casterOverlaySupported;
 
 		volatile bool cancelLoadingReplays;
 
@@ -188,6 +194,62 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 			SetupFilters();
 			SetupManagement();
+			SetupCasterOverlay();
+		}
+
+		void SetupCasterOverlay()
+		{
+			var casterPanel = panel.GetOrNull("CASTER_OVERLAY");
+			if (casterPanel == null)
+				return;
+
+			casterPanel.IsVisible = () => casterOverlaySupported;
+
+			var checkbox = casterPanel.Get<CheckboxWidget>("CASTER_OVERLAY_CHECKBOX");
+			checkbox.IsChecked = () => Game.Settings.Game.ReplayCasterOverlayEnabled;
+			checkbox.OnClick = () =>
+			{
+				Game.Settings.Game.ReplayCasterOverlayEnabled = !Game.Settings.Game.ReplayCasterOverlayEnabled;
+				Game.Settings.Save();
+			};
+
+			SetupCasterScoreDropdown(casterPanel.Get<DropDownButtonWidget>("CASTER_P1_SCORE_DROPDOWN"),
+				() => Game.Settings.Game.ReplayCasterP1Score,
+				v =>
+				{
+					Game.Settings.Game.ReplayCasterP1Score = v;
+					Game.Settings.Save();
+				});
+
+			SetupCasterScoreDropdown(casterPanel.Get<DropDownButtonWidget>("CASTER_P2_SCORE_DROPDOWN"),
+				() => Game.Settings.Game.ReplayCasterP2Score,
+				v =>
+				{
+					Game.Settings.Game.ReplayCasterP2Score = v;
+					Game.Settings.Save();
+				});
+		}
+
+		static void SetupCasterScoreDropdown(DropDownButtonWidget dropdown, Func<int> read, Action<int> write)
+		{
+			var options = Enumerable.Range(MinCasterScore, MaxCasterScore - MinCasterScore + 1).ToArray();
+			dropdown.GetText = () => read().ToString(CultureInfo.InvariantCulture);
+			dropdown.OnMouseDown = _ =>
+			{
+				ScrollItemWidget SetupItem(int score, ScrollItemWidget template)
+				{
+					var item = ScrollItemWidget.Setup(template, () => score == read(), () => write(ClampCasterScore(score)));
+					item.Get<LabelWidget>("LABEL").GetText = () => score.ToString(CultureInfo.InvariantCulture);
+					return item;
+				}
+
+				dropdown.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", 150, options, SetupItem);
+			};
+		}
+
+		static int ClampCasterScore(int score)
+		{
+			return Math.Clamp(score, MinCasterScore, MaxCasterScore);
 		}
 
 		void LoadReplays(string dir, ScrollItemWidget template)
@@ -707,6 +769,9 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 		{
 			selectedReplay = replay;
 			map = selectedReplay != null ? selectedReplay.GameInfo.GetMapPreview(modData) : MapCache.UnknownMap;
+			casterOverlaySupported = selectedReplay != null
+				&& selectedReplay.GameInfo.Players.Count == 2
+				&& map.WorldActorInfo.TraitInfoOrDefault<CasterReplayModeInfo>() != null;
 
 			if (replay == null)
 				return;

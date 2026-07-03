@@ -9,6 +9,7 @@
  */
 #endregion
 
+using System;
 using OpenRA.Graphics;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -139,8 +140,19 @@ namespace OpenRA.Mods.Common.Graphics
 				return;
 
 			var health = actor.TraitOrDefault<IHealth>();
-			var start = wr.Viewport.WorldToViewPx(new float2(decorationBounds.Left + 1, decorationBounds.Top));
-			var end = wr.Viewport.WorldToViewPx(new float2(decorationBounds.Right - 1, decorationBounds.Top));
+			var start = wr.Viewport.WorldToViewPx(new float2(decorationBounds.Left + 1, decorationBounds.Top)).ToFloat2();
+			var end = wr.Viewport.WorldToViewPx(new float2(decorationBounds.Right - 1, decorationBounds.Top)).ToFloat2();
+
+			if (Game.Settings.Game.KeepStatusBarsWhenZoomedOut)
+			{
+				const int MinBarWidth = 6;
+				if (Math.Abs(end.X - start.X) < MinBarWidth)
+				{
+					var center = (start.X + end.X) / 2f;
+					start = new float2(center - MinBarWidth / 2f, start.Y);
+					end = new float2(center + MinBarWidth / 2f, end.Y);
+				}
+			}
 
 			if (DisplayHealth)
 				DrawHealthBar(health, start, end);

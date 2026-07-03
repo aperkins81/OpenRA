@@ -104,10 +104,10 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 
 				var checkbox = checkboxColumns.Dequeue();
 				var optionEnabled = new PredictedCachedTransform<Session.Global, bool>(
-					gs => gs.LobbyOptions[option.Id].IsEnabled);
+					gs => gs.LobbyOptions.TryGetValue(option.Id, out var s) ? s.IsEnabled : option.DefaultValue == "True");
 
 				var optionLocked = new CachedTransform<Session.Global, bool>(
-					gs => gs.LobbyOptions[option.Id].IsLocked);
+					gs => gs.LobbyOptions.TryGetValue(option.Id, out var s) ? s.IsLocked : option.IsLocked);
 
 				checkbox.GetText = () => option.Name;
 				if (option.Description != null)
@@ -143,8 +143,14 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 				}
 
 				var dropdown = dropdownColumns.Dequeue();
+				var fallbackState = new Session.LobbyOptionState
+				{
+					Value = option.DefaultValue,
+					PreferredValue = option.DefaultValue,
+					IsLocked = option.IsLocked
+				};
 				var optionValue = new CachedTransform<Session.Global, Session.LobbyOptionState>(
-					gs => gs.LobbyOptions[option.Id]);
+					gs => gs.LobbyOptions.TryGetValue(option.Id, out var s) ? s : fallbackState);
 
 				var getOptionLabel = new CachedTransform<string, string>(id =>
 				{

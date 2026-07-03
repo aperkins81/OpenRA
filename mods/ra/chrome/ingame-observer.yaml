@@ -2,6 +2,32 @@ Container@OBSERVER_WIDGETS:
 	Logic: LoadIngameChatLogic
 	Children:
 		Container@CHAT_ROOT:
+		Container@CASTER_REPLAY_OVERLAY:
+			Logic: CasterReplayOverlayLogic
+			Width: WINDOW_WIDTH
+			Height: WINDOW_HEIGHT
+			Children:
+				CasterReplayComparison@COMPARISON:
+					X: 0
+					Y: 12
+					Width: WINDOW_WIDTH
+					Height: 96
+				Button@STATS_TOGGLE:
+					X: (WINDOW_WIDTH - 20) / 2
+					Y: 106
+					Width: 20
+					Height: 16
+					Font: Bold
+				CasterReplayBuildColumn@BUILD_LEFT:
+					X: 14
+					Y: 120
+					Width: 40
+					Height: WINDOW_HEIGHT - 240
+				CasterReplayBuildColumn@BUILD_RIGHT:
+					X: WINDOW_WIDTH - 54
+					Y: 120
+					Width: 40
+					Height: WINDOW_HEIGHT - 240
 		Container@MUTE_INDICATOR:
 			Logic: MuteIndicatorLogic
 			X: WINDOW_WIDTH - WIDTH - 260

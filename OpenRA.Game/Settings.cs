@@ -335,9 +335,21 @@ namespace OpenRA
 
 		public bool HideReplayChat = false;
 
+		[Desc("Show the caster overlay when watching a two-player replay.")]
+		public bool ReplayCasterOverlayEnabled = false;
+
+		[Desc("Series score displayed for player 1 in the caster replay overlay.")]
+		public int ReplayCasterP1Score = 0;
+
+		[Desc("Series score displayed for player 2 in the caster replay overlay.")]
+		public int ReplayCasterP2Score = 0;
+
 		public StatusBarsType StatusBars = StatusBarsType.Standard;
 		public TargetLinesType TargetLines = TargetLinesType.Manual;
 		public bool UsePlayerStanceColors = false;
+
+		[Desc("Keep health and progress bars visible when zoomed out beyond the normal minimum level.")]
+		public bool KeepStatusBarsWhenZoomedOut = false;
 
 		public bool AllowDownloading = true;
 

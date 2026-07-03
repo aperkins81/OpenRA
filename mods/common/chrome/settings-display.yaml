@@ -55,7 +55,7 @@ Container@DISPLAY_PANEL:
 									Font: Regular
 				Container@ROW:
 					Width: PARENT_WIDTH - 24
-					Height: 50
+					Height: 75
 					Children:
 						Container@UI_SCALE_DROPDOWN_CONTAINER:
 							X: 10
@@ -84,6 +84,14 @@ Container@DISPLAY_PANEL:
 									Width: PARENT_WIDTH
 									Height: 25
 									Font: Regular
+								Checkbox@KEEP_STATUS_BARS_ZOOMED_OUT_CHECKBOX:
+									Y: 55
+									Width: PARENT_WIDTH
+									Height: 20
+									Font: Regular
+									Text: checkbox-keep-status-bars-when-zoomed-out.label
+									TooltipText: checkbox-keep-status-bars-when-zoomed-out.description
+									TooltipContainer: SETTINGS_TOOLTIP_CONTAINER
 				Container@ROW:
 					Width: PARENT_WIDTH - 24
 					Height: 20

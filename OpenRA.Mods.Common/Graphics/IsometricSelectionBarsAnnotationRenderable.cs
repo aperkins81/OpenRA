@@ -9,6 +9,7 @@
  */
 #endregion
 
+using System;
 using OpenRA.Graphics;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -77,6 +78,17 @@ namespace OpenRA.Mods.Common.Graphics
 			// HACK: Work around rounding errors that may cause a few-px offset in the end relative to the start
 			// Force the bar to take a 45 degree angle
 			end = new float2(end.X, start.Y - (end.X - start.X) / 2);
+
+			if (Game.Settings.Game.KeepStatusBarsWhenZoomedOut)
+			{
+				const float MinBarWidth = 6;
+				if (Math.Abs(end.X - start.X) < MinBarWidth)
+				{
+					var centerX = (start.X + end.X) / 2f;
+					start = new float2(centerX - MinBarWidth / 2f, start.Y);
+					end = new float2(centerX + MinBarWidth / 2f, start.Y - MinBarWidth / 2f);
+				}
+			}
 
 			// Round the cut point to the nearest pixel to avoid potential off-by-one pixel offsets distorting the bar
 			var cutX = (int)(float2.Lerp(start.X, end.X, value) + 0.5f);

@@ -95,6 +95,9 @@ namespace OpenRA.Mods.Common.Traits.Render
 				if (self.World.Selection.RolloverContains(self))
 					displayHealth = displayExtra = true;
 
+			if (Game.Settings.Game.KeepStatusBarsWhenZoomedOut && wr.Viewport.Zoom < wr.Viewport.MinZoom)
+				displayHealth = displayExtra = true;
+
 			if (selected)
 				foreach (var r in RenderSelectionBox(self, wr, Info.SelectionBoxColor))
 					yield return r;

@@ -596,6 +596,12 @@ button-management-mng-delall = Delete All
 checkbox-load-game-filters = Filters
 label-replay-list-container-replaybrowser-title = Choose Replay
 button-replaybrowser-panel-watch = Watch
+label-replaybrowser-caster-overlay-title = Caster Overlay
+checkbox-replaybrowser-caster-overlay =
+    .label = Caster Replay Mode
+    .description = Shows a two-player caster overlay while watching the replay
+label-replaybrowser-caster-p1-score = Score (Player 1):
+label-replaybrowser-caster-p2-score = Score (Player 2):
 
 ## settings-advanced.yaml
 label-network-section-header = Advanced
@@ -641,6 +647,10 @@ checkbox-hide-replay-chat-container = Hide Chat in Replays
 ## settings-display.yaml
 label-target-lines-dropdown-container = Target Lines:
 label-status-bar-dropdown-container-bars = Status Bars:
+
+checkbox-keep-status-bars-when-zoomed-out =
+    .label = Keep Status Bars When Zoomed Out
+    .description = Show health and progress bars on units and buildings when zoomed out beyond the normal limit
 
 checkbox-player-stance-colors-container =
     .label = Player Relationship Colors

@@ -225,6 +225,7 @@ World:
 		ShortGameCheckboxDisplayOrder: 2
 		TechLevelDropdownDisplayOrder: 2
 		GameSpeedDropdownDisplayOrder: 1
+	CasterReplayMode:
 	CreateMapPlayers:
 	StartingUnits@mcvonly:
 		Class: none
