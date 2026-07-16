@@ -348,6 +348,9 @@ namespace OpenRA
 		public TargetLinesType TargetLines = TargetLinesType.Manual;
 		public bool UsePlayerStanceColors = false;
 
+		[Desc("Show a tooltip with unit info when selecting a single unit type.")]
+		public bool SelectionTooltip = true;
+
 		[Desc("Keep health and progress bars visible when zoomed out beyond the normal minimum level.")]
 		public bool KeepStatusBarsWhenZoomedOut = false;
 

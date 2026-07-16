@@ -88,7 +88,8 @@ namespace OpenRA.Mods.Common.Traits.Render
 			// Extra bars are shown when:
 			//  * actor is selected / in active drag rectangle / under the mouse
 			//  * status bar preference is set to "always show" or "when damaged"
-			var displayExtra = selected || (regularWorld && statusBars != StatusBarsType.Standard);
+			var displayExtra = selected || (regularWorld && statusBars != StatusBarsType.Standard)
+				|| ShouldAlwaysDisplayCasterProductionBars(self);
 
 			// PERF: Only search rollover enumerable if needed.
 			if (!displayHealth || !displayExtra)
@@ -138,5 +139,12 @@ namespace OpenRA.Mods.Common.Traits.Render
 		protected abstract int2 GetDecorationOrigin(Actor self, WorldRenderer wr, string pos, int2 margin);
 		protected abstract IEnumerable<IRenderable> RenderSelectionBox(Actor self, WorldRenderer wr, Color color);
 		protected abstract IEnumerable<IRenderable> RenderSelectionBars(Actor self, WorldRenderer wr, bool displayHealth, bool displayExtra);
+
+		static bool ShouldAlwaysDisplayCasterProductionBars(Actor self)
+		{
+			var casterMode = self.World.WorldActor.TraitOrDefault<CasterReplayMode>();
+			return casterMode != null && casterMode.Enabled && self.Info.HasTraitInfo<BuildingInfo>()
+				&& self.Info.HasTraitInfo<ProductionBarInfo>();
+		}
 	}
 }

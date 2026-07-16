@@ -253,6 +253,14 @@ Fonts:
 		Font: common|FreeSansBold.ttf
 		Size: 24
 		Ascender: 18
+	CasterUnitCount:
+		Font: common|FreeSansBold.ttf
+		Size: 32
+		Ascender: 24
+	CasterComparisonValue:
+		Font: common|FreeSansBold.ttf
+		Size: 26
+		Ascender: 20
 	Title:
 		Font: ra|ZoodRangmah.ttf
 		Size: 48

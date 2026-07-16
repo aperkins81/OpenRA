@@ -213,6 +213,11 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 				Game.Settings.Save();
 			};
 
+			var scoresVisible = () => Game.Settings.Game.ReplayCasterOverlayEnabled;
+			casterPanel.Get<LabelWidget>("CASTER_SCORES_DESC").IsVisible = scoresVisible;
+			casterPanel.Get<DropDownButtonWidget>("CASTER_P1_SCORE_DROPDOWN").IsVisible = scoresVisible;
+			casterPanel.Get<DropDownButtonWidget>("CASTER_P2_SCORE_DROPDOWN").IsVisible = scoresVisible;
+
 			SetupCasterScoreDropdown(casterPanel.Get<DropDownButtonWidget>("CASTER_P1_SCORE_DROPDOWN"),
 				() => Game.Settings.Game.ReplayCasterP1Score,
 				v =>

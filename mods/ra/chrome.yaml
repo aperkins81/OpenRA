@@ -137,6 +137,13 @@ sidebar-bits:
 		production-tooltip-cost: 68, 51, 16, 16
 		indicator-muted: 221, 17, 26, 24
 
+production-tooltip-armor-icon:
+	Image: production-tooltip-armor.png
+	Image2x: production-tooltip-armor-2x.png
+	Image3x: production-tooltip-armor-3x.png
+	Regions:
+		production-tooltip-armor: 0, 0, 16, 16
+
 commandbar:
 	Inherits: ^Sidebar
 	Regions:

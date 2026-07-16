@@ -29,6 +29,7 @@ namespace OpenRA.Mods.Common.Traits
 		const int MaxScore = 9;
 
 		public bool Enabled { get; private set; }
+		public bool ShowWaypointLines { get; set; } = true;
 		public int Player1Score { get; private set; }
 		public int Player2Score { get; private set; }
 

@@ -9,6 +9,7 @@
  */
 #endregion
 
+using OpenRA;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Widgets;
 
@@ -31,6 +32,7 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			var p2 = players[1];
 
 			var statsExpanded = false;
+			var overlayHidden = false;
 
 			var comparison = widget.Get<CasterReplayComparisonWidget>("COMPARISON");
 			comparison.GetPlayer1 = () => p1;
@@ -38,16 +40,58 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			comparison.GetPlayer1Score = () => mode.Player1Score;
 			comparison.GetPlayer2Score = () => mode.Player2Score;
 			comparison.ShowStats = () => statsExpanded;
+			comparison.IsVisible = () => !overlayHidden;
 
 			var statsToggle = widget.Get<ButtonWidget>("STATS_TOGGLE");
-			statsToggle.GetText = () => statsExpanded ? "-" : "+";
+			statsToggle.GetText = () => "+";
 			statsToggle.OnClick = () => statsExpanded = !statsExpanded;
+			statsToggle.IsVisible = () => !overlayHidden;
+
+			var hideToggle = widget.Get<ButtonWidget>("OVERLAY_HIDE_TOGGLE");
+			hideToggle.GetText = () => "-";
+			hideToggle.IsHighlighted = () => overlayHidden;
+			hideToggle.OnClick = () =>
+			{
+				overlayHidden = !overlayHidden;
+				if (overlayHidden)
+					statsExpanded = false;
+			};
+
+			var statusBarsToggle = widget.Get<ButtonWidget>("STATUS_BARS_TOGGLE");
+			statusBarsToggle.GetText = () => Game.Settings.Game.StatusBars switch
+			{
+				StatusBarsType.AlwaysShow => "HP",
+				StatusBarsType.DamageShow => "DMG",
+				_ => "OFF"
+			};
+			statusBarsToggle.IsHighlighted = () => Game.Settings.Game.StatusBars != StatusBarsType.Standard;
+			statusBarsToggle.IsVisible = () => !overlayHidden;
+			statusBarsToggle.OnClick = () =>
+			{
+				Game.Settings.Game.StatusBars = Game.Settings.Game.StatusBars switch
+				{
+					StatusBarsType.AlwaysShow => StatusBarsType.DamageShow,
+					StatusBarsType.DamageShow => StatusBarsType.Standard,
+					_ => StatusBarsType.AlwaysShow
+				};
+			};
+
+			var waypointsToggle = widget.Get<ButtonWidget>("WAYPOINTS_TOGGLE");
+			waypointsToggle.GetText = () => "↗";
+			waypointsToggle.IsHighlighted = () => mode.ShowWaypointLines;
+			waypointsToggle.OnClick = () => mode.ShowWaypointLines = !mode.ShowWaypointLines;
+			waypointsToggle.IsVisible = () => !overlayHidden;
 
 			var buildLeft = widget.Get<CasterReplayBuildColumnWidget>("BUILD_LEFT");
 			buildLeft.GetPlayer = () => p1;
+			buildLeft.IsVisible = () => !overlayHidden;
 
 			var buildRight = widget.Get<CasterReplayBuildColumnWidget>("BUILD_RIGHT");
 			buildRight.GetPlayer = () => p2;
+			buildRight.IsVisible = () => !overlayHidden;
+
+			var livestreamReserve = widget.Get<ContainerWidget>("CASTER_LIVESTREAM_RESERVE");
+			livestreamReserve.IsVisible = () => !overlayHidden;
 		}
 	}
 }

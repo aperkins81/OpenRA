@@ -101,6 +101,13 @@ namespace OpenRA.Mods.Common.Widgets.Logic
 			this.world = world;
 			this.worldRenderer = worldRenderer;
 
+			var casterMode = world.WorldActor.TraitOrDefault<CasterReplayMode>();
+			if (casterMode != null && casterMode.Enabled && CasterReplayMode.GetPlayers(world).Length == 2)
+			{
+				widget.IsVisible = () => false;
+				return;
+			}
+
 			MiniYaml yaml;
 			var keyNames = Enum.GetNames<ObserverStatsPanel>();
 			var statsHotkeys = new HotkeyReference[keyNames.Length];

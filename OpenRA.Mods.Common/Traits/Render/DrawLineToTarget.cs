@@ -10,6 +10,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.Orders;
 using OpenRA.Traits;
@@ -42,7 +43,7 @@ namespace OpenRA.Mods.Common.Traits
 		public override object Create(ActorInitializer init) { return new DrawLineToTarget(this); }
 	}
 
-	public class DrawLineToTarget : IRenderAboveShroud, IRenderAnnotationsWhenSelected, INotifySelected
+	public class DrawLineToTarget : IRenderAboveShroud, IRenderAnnotations, IRenderAnnotationsWhenSelected, INotifySelected
 	{
 		readonly DrawLineToTargetInfo info;
 		readonly List<IRenderable> renderableCache = [];
@@ -51,6 +52,18 @@ namespace OpenRA.Mods.Common.Traits
 		public DrawLineToTarget(DrawLineToTargetInfo info)
 		{
 			this.info = info;
+		}
+
+		public static bool IsCasterReplayTargetActor(Actor self)
+		{
+			if (!self.World.IsReplay)
+				return false;
+
+			var mode = self.World.WorldActor.TraitOrDefault<CasterReplayMode>();
+			if (mode == null || !mode.Enabled)
+				return false;
+
+			return CasterReplayMode.GetPlayers(self.World).Contains(self.Owner);
 		}
 
 		public void ShowTargetLines(Actor self)
@@ -69,7 +82,16 @@ namespace OpenRA.Mods.Common.Traits
 
 		bool ShouldRender(Actor self)
 		{
-			if (!self.Owner.IsAlliedWith(self.World.LocalPlayer) || Game.Settings.Game.TargetLines == TargetLinesType.Disabled || !Ui.WidgetsVisible)
+			if (Game.Settings.Game.TargetLines == TargetLinesType.Disabled || !Ui.WidgetsVisible)
+				return false;
+
+			if (IsCasterReplayTargetActor(self))
+			{
+				var mode = self.World.WorldActor.TraitOrDefault<CasterReplayMode>();
+				return mode != null && mode.ShowWaypointLines;
+			}
+
+			if (!self.Owner.IsAlliedWith(self.World.LocalPlayer))
 				return false;
 
 			// Players want to see the lines when in waypoint mode.
@@ -99,11 +121,26 @@ namespace OpenRA.Mods.Common.Traits
 
 		bool IRenderAboveShroud.SpatiallyPartitionable => false;
 
-		IEnumerable<IRenderable> IRenderAnnotationsWhenSelected.RenderAnnotations(Actor self, WorldRenderer wr)
+		IEnumerable<IRenderable> IRenderAnnotations.RenderAnnotations(Actor self, WorldRenderer wr)
 		{
-			if (!ShouldRender(self))
+			if (!IsCasterReplayTargetActor(self) || !ShouldRender(self))
 				return [];
 
+			return RenderTargetLineAnnotations(self);
+		}
+
+		bool IRenderAnnotations.SpatiallyPartitionable => false;
+
+		IEnumerable<IRenderable> IRenderAnnotationsWhenSelected.RenderAnnotations(Actor self, WorldRenderer wr)
+		{
+			if (IsCasterReplayTargetActor(self) || !ShouldRender(self))
+				return [];
+
+			return RenderTargetLineAnnotations(self);
+		}
+
+		IEnumerable<IRenderable> RenderTargetLineAnnotations(Actor self)
+		{
 			renderableCache.Clear();
 			var prev = self.CenterPosition;
 			var a = self.CurrentActivity;
@@ -143,7 +180,7 @@ namespace OpenRA.Mods.Common.Traits
 		{
 			// Target lines are only automatically shown for the owning player
 			// Spectators and allies must use the force-display modifier
-			if (self.Owner != self.World.LocalPlayer)
+			if (self.Owner != self.World.LocalPlayer && !DrawLineToTarget.IsCasterReplayTargetActor(self))
 				return;
 
 			// Draw after frame end so that all the queueing of activities are done before drawing.

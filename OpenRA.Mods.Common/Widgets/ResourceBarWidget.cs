@@ -48,12 +48,12 @@ namespace OpenRA.Mods.Common.Widgets
 		{
 			base.Initialize(args);
 
-			indicator = ChromeProvider.GetImage(IndicatorCollection, IndicatorImage);
+			indicator = ChromeProvider.TryGetImage(IndicatorCollection, IndicatorImage);
 		}
 
 		public override void MouseEntered()
 		{
-			if (TooltipContainer == null)
+			if (TooltipContainer == null || TooltipTextCached == null)
 				return;
 
 			Func<string> getText = () => TooltipTextCached.Update((GetUsed(), GetProvided()));
@@ -88,9 +88,12 @@ namespace OpenRA.Mods.Common.Widgets
 				var br = tl + new float2(b.Width, (int)(providedFrac * b.Height));
 				Game.Renderer.RgbaColorRenderer.FillRect(tl, br, color);
 
-				var x = (b.Left + b.Right - indicator.Size.X) / 2;
-				var y = float2.Lerp(b.Bottom, b.Top, usedFrac) - indicator.Size.Y / 2;
-				WidgetUtils.DrawSprite(indicator, new float2(x, y));
+				if (indicator != null)
+				{
+					var x = (b.Left + b.Right - indicator.Size.X) / 2;
+					var y = float2.Lerp(b.Bottom, b.Top, usedFrac) - indicator.Size.Y / 2;
+					WidgetUtils.DrawSprite(indicator, new float2(x, y));
+				}
 			}
 			else
 			{
@@ -98,9 +101,12 @@ namespace OpenRA.Mods.Common.Widgets
 				var br = tl + new float2((int)(providedFrac * b.Width), b.Height);
 				Game.Renderer.RgbaColorRenderer.FillRect(tl, br, color);
 
-				var x = float2.Lerp(b.Left, b.Right, usedFrac) - indicator.Size.X / 2;
-				var y = (b.Bottom + b.Top - indicator.Size.Y) / 2;
-				WidgetUtils.DrawSprite(indicator, new float2(x, y));
+				if (indicator != null)
+				{
+					var x = float2.Lerp(b.Left, b.Right, usedFrac) - indicator.Size.X / 2;
+					var y = (b.Bottom + b.Top - indicator.Size.Y) / 2;
+					WidgetUtils.DrawSprite(indicator, new float2(x, y));
+				}
 			}
 		}
 	}

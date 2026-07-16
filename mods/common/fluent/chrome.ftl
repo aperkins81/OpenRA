@@ -600,8 +600,7 @@ label-replaybrowser-caster-overlay-title = Caster Overlay
 checkbox-replaybrowser-caster-overlay =
     .label = Caster Replay Mode
     .description = Shows a two-player caster overlay while watching the replay
-label-replaybrowser-caster-p1-score = Score (Player 1):
-label-replaybrowser-caster-p2-score = Score (Player 2):
+label-replaybrowser-caster-scores = Scores:
 
 ## settings-advanced.yaml
 label-network-section-header = Advanced
@@ -655,6 +654,10 @@ checkbox-keep-status-bars-when-zoomed-out =
 checkbox-player-stance-colors-container =
     .label = Player Relationship Colors
     .tooltip = Change player colors based on relationship (own, enemy, ally, neutral)
+
+checkbox-selection-tooltip-container =
+    .label = Show Selection Tooltip
+    .tooltip = Show unit name, armor type, and cost when selecting a single unit type
 
 checkbox-ui-feedback-container =
     .label = Show UI Feedback Notifications

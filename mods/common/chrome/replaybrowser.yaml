@@ -131,50 +131,34 @@ Background@REPLAYBROWSER_PANEL:
 				Container@CASTER_OVERLAY:
 					Y: 325
 					Width: 280
-					Height: 70
+					Height: 50
 					Children:
-						Label@CASTER_OVERLAY_TITLE:
+						Checkbox@CASTER_OVERLAY_CHECKBOX:
 							X: 85
 							Y: 0
 							Width: PARENT_WIDTH - 85
-							Height: 25
-							Font: Bold
-							Align: Center
-							Text: label-replaybrowser-caster-overlay-title
-						Checkbox@CASTER_OVERLAY_CHECKBOX:
-							X: 85
-							Y: 25
-							Width: PARENT_WIDTH - 85
-							Height: 20
+							Height: 22
 							Font: Regular
 							Text: checkbox-replaybrowser-caster-overlay.label
 							TooltipText: checkbox-replaybrowser-caster-overlay.description
 							TooltipContainer: TOOLTIP_CONTAINER
-						Label@CASTER_P1_SCORE_DESC:
+						Label@CASTER_SCORES_DESC:
 							X: 0
-							Y: 48
+							Y: 28
 							Width: 80
 							Height: 20
-							Text: label-replaybrowser-caster-p1-score
+							Text: label-replaybrowser-caster-scores
 							Align: Right
 							Font: Tiny
 						DropDownButton@CASTER_P1_SCORE_DROPDOWN:
 							X: 85
-							Y: 45
-							Width: 40
+							Y: 25
+							Width: 55
 							Height: 25
-						Label@CASTER_P2_SCORE_DESC:
-							X: 130
-							Y: 48
-							Width: 80
-							Height: 20
-							Text: label-replaybrowser-caster-p2-score
-							Align: Right
-							Font: Tiny
 						DropDownButton@CASTER_P2_SCORE_DROPDOWN:
-							X: 215
-							Y: 45
-							Width: 40
+							X: 145
+							Y: 25
+							Width: 55
 							Height: 25
 				Container@MANAGEMENT:
 					X: 85

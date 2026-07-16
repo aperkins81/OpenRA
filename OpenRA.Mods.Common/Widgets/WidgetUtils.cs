@@ -424,5 +424,73 @@ namespace OpenRA.Mods.Common.Widgets
 
 			notificationWidget.Bounds.Width = boxWidth - notificationWidget.Bounds.X;
 		}
+
+		public static string WrapTextWithIndent(string text, int width, SpriteFont font, int indent = 4)
+		{
+			var textSize = font.Measure(text);
+			var indentString = indent > 0 ? new string(' ', indent) : "";
+			var effectiveWidth = indent > 0 ? width - font.Measure(indentString).X : width;
+
+			if (textSize.X > width)
+			{
+				var lines = text.Split('\n').ToList();
+				var isOriginalLine = new bool[lines.Count];
+
+				for (var i = 0; i < lines.Count; i++)
+					isOriginalLine[i] = true;
+
+				for (var i = 0; i < lines.Count; i++)
+				{
+					var line = lines[i];
+					var currentWidth = isOriginalLine[i] ? width : effectiveWidth;
+
+					if (font.Measure(line).X <= currentWidth)
+						continue;
+
+					var start = 0;
+					while (true)
+					{
+						var spaceIndex = line.IndexOf(' ', start);
+						if (spaceIndex == -1)
+							break;
+
+						var fragmentWidth = font.Measure(line[..spaceIndex]).X;
+						if (fragmentWidth > currentWidth)
+							break;
+
+						start = spaceIndex + 1;
+					}
+
+					if (start > 0)
+					{
+						lines[i] = line[..(start - 1)];
+						lines.Insert(i + 1, line[start..]);
+
+						var newIsOriginalLine = new bool[lines.Count];
+						for (var j = 0; j <= i; j++)
+							newIsOriginalLine[j] = isOriginalLine[j];
+
+						newIsOriginalLine[i + 1] = false;
+						for (var j = i + 2; j < lines.Count; j++)
+							newIsOriginalLine[j] = isOriginalLine[j - 1];
+
+						isOriginalLine = newIsOriginalLine;
+					}
+				}
+
+				if (indent > 0)
+				{
+					for (var i = 0; i < lines.Count; i++)
+					{
+						if (!isOriginalLine[i])
+							lines[i] = indentString + lines[i];
+					}
+				}
+
+				return string.Join("\n", lines);
+			}
+
+			return text;
+		}
 	}
 }

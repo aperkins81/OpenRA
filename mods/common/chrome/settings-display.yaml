@@ -120,6 +120,21 @@ Container@DISPLAY_PANEL:
 					Width: PARENT_WIDTH - 24
 					Height: 20
 					Children:
+						Container@SELECTION_TOOLTIP_CHECKBOX_CONTAINER:
+							X: 10
+							Width: PARENT_WIDTH / 2 - 20
+							Children:
+								Checkbox@SELECTION_TOOLTIP_CHECKBOX:
+									Width: PARENT_WIDTH
+									Height: 20
+									Font: Regular
+									Text: checkbox-selection-tooltip-container.label
+									TooltipText: checkbox-selection-tooltip-container.tooltip
+									TooltipContainer: SETTINGS_TOOLTIP_CONTAINER
+				Container@ROW:
+					Width: PARENT_WIDTH - 24
+					Height: 20
+					Children:
 						Container@UI_FEEDBACK_CHECKBOX_CONTAINER:
 							X: 10
 							Width: PARENT_WIDTH / 2 - 10

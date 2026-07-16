@@ -7,27 +7,70 @@ Container@OBSERVER_WIDGETS:
 			Width: WINDOW_WIDTH
 			Height: WINDOW_HEIGHT
 			Children:
+				Button@STATS_TOGGLE:
+					X: (WINDOW_WIDTH - 112) / 2
+					Y: 2
+					Width: 24
+					Height: 22
+					Font: Bold
+				Button@OVERLAY_HIDE_TOGGLE:
+					X: (WINDOW_WIDTH - 112) / 2 + 28
+					Y: 2
+					Width: 24
+					Height: 22
+					Font: Bold
+				Button@STATUS_BARS_TOGGLE:
+					X: (WINDOW_WIDTH - 112) / 2 + 56
+					Y: 2
+					Width: 24
+					Height: 22
+					Font: Bold
+				Button@WAYPOINTS_TOGGLE:
+					X: (WINDOW_WIDTH - 112) / 2 + 84
+					Y: 2
+					Width: 28
+					Height: 22
+					Font: Bold
 				CasterReplayComparison@COMPARISON:
 					X: 0
-					Y: 12
+					Y: 28
 					Width: WINDOW_WIDTH
-					Height: 96
-				Button@STATS_TOGGLE:
-					X: (WINDOW_WIDTH - 20) / 2
-					Y: 106
-					Width: 20
-					Height: 16
-					Font: Bold
+					Height: 160
+					TooltipContainer: TOOLTIP_CONTAINER
 				CasterReplayBuildColumn@BUILD_LEFT:
-					X: 14
-					Y: 120
-					Width: 40
-					Height: WINDOW_HEIGHT - 240
+					X: 276
+					Y: 152
+					Width: WINDOW_WIDTH / 2 - 282
+					Height: 58
+					IconWidth: 56
+					IconHeight: 42
+					ProgressBarHeight: 8
+					IconTopPadding: 4
+					TextPadding: 1
+					ColumnCount: 6
+					ColumnSpacing: 4
+					RightAligned: True
+					Opacity: 0.65
+					TooltipContainer: TOOLTIP_CONTAINER
 				CasterReplayBuildColumn@BUILD_RIGHT:
-					X: WINDOW_WIDTH - 54
-					Y: 120
-					Width: 40
-					Height: WINDOW_HEIGHT - 240
+					X: WINDOW_WIDTH / 2 + 6
+					Y: 152
+					Width: WINDOW_WIDTH / 2 - 264
+					Height: 58
+					IconWidth: 56
+					IconHeight: 42
+					ProgressBarHeight: 8
+					IconTopPadding: 4
+					TextPadding: 1
+					ColumnCount: 6
+					ColumnSpacing: 4
+					Opacity: 0.65
+					TooltipContainer: TOOLTIP_CONTAINER
+				Container@CASTER_LIVESTREAM_RESERVE:
+					X: WINDOW_WIDTH - 250
+					Y: WINDOW_HEIGHT - WINDOW_HEIGHT / 5
+					Width: 250
+					Height: WINDOW_HEIGHT / 5
 		Container@MUTE_INDICATOR:
 			Logic: MuteIndicatorLogic
 			X: WINDOW_WIDTH - WIDTH - 260
